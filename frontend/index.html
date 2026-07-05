@@ -77,6 +77,9 @@
   .painmap .pm .body b{color:var(--green-deep)}
   .case .footnote{text-align:center;color:var(--muted);margin-top:28px}
   .case .cta2{text-align:center;margin-top:18px}
+  section.policy{background:#eef7ef;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .policy .cite{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .policy .cite b{color:var(--green-deep)}
   .coop{background:var(--green-deep);color:#fff;padding:14px 0;text-align:center;font-size:14px}
   .coop b{color:#ffd97a}
   .coop .bar{display:inline-block;width:180px;max-width:40vw;height:8px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden;margin:0 10px;vertical-align:middle}
@@ -89,7 +92,7 @@
 <header class="nav"><div class="wrap">
   <div class="brand"><span class="logo">🌿</span> 本草链 <small>HerbChain</small></div>
   <nav class="links">
-    <a href="#case">真实案例</a><a href="#modules">功能</a><a href="#flow">链路</a><a href="#stats">价值</a><a href="#contact">联系</a>
+    <a href="#case">真实案例</a><a href="#policy">政策依据</a><a href="#modules">功能</a><a href="#flow">链路</a><a href="#contact">联系</a>
   </nav>
 </div></header>
 
@@ -109,7 +112,8 @@
   <a href="chat.html" data-chat>我也参与 →</a>
 </div></div>
 <script>fetch('/api/count').then(r=>r.json()).then(d=>{const n=d.participants||0,left=Math.max(0,50-n),pct=Math.min(100,n/50*100);const e=id=>document.getElementById(id);if(e('coopN')){e('coopN').textContent=n;e('coopLeft').textContent=left;e('coopBar').style.width=pct+'%';}}).catch(()=>{});
-document.querySelectorAll('[data-chat]').forEach(a=>a.href='chat.html?code='+encodeURIComponent(window.CHAT_CODE||''));</script>
+document.querySelectorAll('[data-chat]').forEach(a=>a.href='chat.html?code='+encodeURIComponent(window.CHAT_CODE||''));
+document.querySelectorAll('[data-draft]').forEach(a=>a.href='draft.html?code='+encodeURIComponent(window.CHAT_CODE||''));</script>
 
 <section id="case" class="case alt"><div class="wrap">
   <h2 class="sec-title">来自一线的真实需求</h2>
@@ -141,6 +145,35 @@ document.querySelectorAll('[data-chat]').forEach(a=>a.href='chat.html?code='+enc
   <div class="cta2">
     <a class="btn primary" href="#modules">看看这些能力怎么落地 ↓</a>
     <a class="btn ghost" href="chat.html" style="margin-left:10px" data-chat>说说你的真实痛点</a>
+  </div>
+</div></section>
+
+<section id="policy" class="policy"><div class="wrap">
+  <h2 class="sec-title">政策给了出路</h2>
+  <p class="sec-sub">不是空呼吁——核定扣除试点有授权、有先例、有本省基础</p>
+  <div class="grid">
+    <div class="card">
+      <div class="ico">⚖️</div>
+      <h3>法律依据</h3>
+      <p><b>《增值税法》</b>（2026.1 施行）农业生产者销售自产农产品免征增值税；<b>财税2012 38号 + 2013 57号</b>确立核定扣除试点办法并授权各省扩围；<b>财政部公告2026 10号</b>将试点延续至 2027 年。</p>
+      <div class="cite">依据：增值税法第二十四条、实施条例第二十六条；财税2012 38号、财税2013 57号；财政部 税务总局公告2026年第10号</div>
+    </div>
+    <div class="card">
+      <div class="ico">🏛️</div>
+      <h3>6 省先例</h3>
+      <p>陕、黔、桂、皖、宁、湘 已将中药材/中药饮片纳入核定扣除试点；其中<b>安徽把"中药材商品交易中心"纳入</b>——与靖州茯苓交易区模式最接近。</p>
+      <div class="cite">先例：陕2018-13号、黔2018-17号、桂2022-1号、皖2018-9号、宁2020、湘2019-2号</div>
+    </div>
+    <div class="card">
+      <div class="ico">🌍</div>
+      <h3>产业地位</h3>
+      <p>靖州"中国茯苓之乡"，年交易量 <b>8 万吨占全国 70%</b>、出口占全国 2/3；已列为湖南省级中小企业产业集群培育对象。</p>
+      <div class="cite">来源：湖南省工信厅 2024 答复；红网怀化报道</div>
+    </div>
+  </div>
+  <p class="footnote" style="text-align:center;margin-top:26px">我们已把这些政策依据整理进《靖州茯苓进项税抵扣报告》——欢迎协会、税务师、同行一起起草。</p>
+  <div style="text-align:center;margin-top:14px">
+    <a class="btn primary" href="draft.html" data-draft>参与协同起草 →</a>
   </div>
 </div></section>
 

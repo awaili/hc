@@ -1,0 +1,18 @@
+# 密钥与凭据(绝不入库)
+*.env
+view_token
+chat_access
+*.key
+*.pem
+*.crt
+
+# Python
+__pycache__/
+*.pyc
+
+# Claude 工作目录
+.claude/
+
+# 日志与临时
+*.log
+.DS_Store

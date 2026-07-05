@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本草链 HerbChain · 关键问题问卷</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>🌿</text></svg>">
+<style>
+  :root{--green:#1f6b3a;--green-deep:#0f4724;--ink:#1c2a22;--bg:#f7f5ef;--line:#e4e0d4;--muted:#5d6b5d}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px 80px}
+  header.top{background:var(--green-deep);color:#fff;padding:28px 0;text-align:center}
+  header.top .brand{font-size:22px;font-weight:700;letter-spacing:1px}
+  header.top .brand small{font-size:13px;color:#9fc0a3;font-weight:400;margin-left:8px}
+  header.top p{color:#d8e6db;font-size:14px;margin-top:6px}
+  .intro{padding:34px 0 8px;font-size:16px;color:var(--muted)}
+  .intro b{color:var(--ink)}
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0 6px}
+  .meta label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  .meta input, .field input[type=text]{
+    width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:8px;font-size:15px;background:#fff}
+  .meta input:focus{outline:none;border-color:var(--green)}
+  q{display:block}
+  .q{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin:18px 0}
+  .q .qt{font-size:17px;font-weight:700;margin-bottom:4px}
+  .q .qn{display:inline-block;width:26px;height:26px;line-height:26px;border-radius:50%;background:var(--green);color:#fff;font-size:13px;text-align:center;margin-right:8px;vertical-align:middle}
+  .q .hint{font-size:13px;color:var(--muted);margin-bottom:14px;margin-left:34px}
+  .opts{margin-left:34px}
+  .opt{display:flex;align-items:flex-start;gap:10px;padding:7px 0;font-size:15px;cursor:pointer}
+  .opt input{margin-top:5px;accent-color:var(--green)}
+  .other{margin-left:34px;margin-top:8px}
+  .other input{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px}
+  textarea{width:100%;min-height:90px;padding:12px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-family:inherit;resize:vertical}
+  .block{margin:26px 0}
+  .block label{display:block;font-weight:700;margin-bottom:8px}
+  .submit{margin-top:26px;text-align:center}
+  .btn{display:inline-block;padding:14px 40px;border-radius:8px;font-size:17px;font-weight:600;border:none;cursor:pointer;background:var(--green);color:#fff}
+  .btn:hover{background:var(--green-deep)}
+  .btn:disabled{opacity:.6;cursor:wait}
+  #result{margin-top:18px;text-align:center;font-size:16px;padding:16px;border-radius:8px;display:none}
+  .ok{background:#e7f4ec;color:var(--green-deep);border:1px solid #bfe3cf}
+  .err{background:#fbeceb;color:#a33;border:1px solid #f3c9c5}
+  .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+  @media(max-width:560px){.meta{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">🌿 本草链 <small>HerbChain</small></div>
+  <p>系统建设关键问题问卷 · 你的回答直接决定系统怎么搭</p>
+</header>
+
+<div class="wrap">
+  <p class="intro">为了把"本草链"按我们真实的业务搭好，请先回答下面这几个关键问题。<b>没有标准答案，按你实际想法选就行</b>。每题可选一个主选项，必要时在"其他/说明"里补充。大约 3 分钟。</p>
+  <div style="background:#fff7e6;border:1px solid #e8c97a;border-radius:8px;padding:10px 12px;font-size:13px;color:#7a5b12;margin:18px 0">
+    ⚠️ <b>税务合规提示</b>：中药材大货是税务高风险行业。系统会把"农产品收购发票、进项抵扣、销项开票、货/钱/票三流一致防虚开"做进流程。若有特别的税务处理诉求，请在最后一栏备注里写明。
+  </div>
+
+  <div class="meta">
+    <div><label>你的称呼</label><input id="name" type="text" placeholder="如：老张 / 王总" maxlength="60"></div>
+    <div><label>你的角色</label><input id="role" type="text" placeholder="如：产地收购 / 加工 / 销售 / 老板" maxlength="60"></div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q">
+    <div class="qt"><span class="qn">1</span>分润按什么口径算？</div>
+    <div class="hint">毛利还是净利？要不要扣除资金占用利息、税负、运费？</div>
+    <div class="opts" data-q="q1_profit">
+      <label class="opt"><input type="radio" name="q1" value="按毛利(不扣任何费用)">按毛利（不扣任何费用）</label>
+      <label class="opt"><input type="radio" name="q1" value="按毛利(扣运费和税负)">按毛利（扣运费和税负）</label>
+      <label class="opt"><input type="radio" name="q1" value="按净利(扣资金利息+税负+运费)">按净利（扣资金利息+税负+运费）</label>
+    </div>
+    <div class="other"><input type="text" data-qtext="q1" placeholder="其他/补充说明（可选）"></div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q">
+    <div class="qt"><span class="qn">2</span>合伙人之间的客户，互相能看见吗？</div>
+    <div class="hint">客户资源归属与可见范围怎么定？</div>
+    <div class="opts" data-q="q2_customer_vis">
+      <label class="opt"><input type="radio" name="q2" value="完全互不可见">完全互不可见</label>
+      <label class="opt"><input type="radio" name="q2" value="老板可见全量,合伙人只见自己">老板可见全量，合伙人只见自己</label>
+      <label class="opt"><input type="radio" name="q2" value="全部互相可见">全部互相可见</label>
+    </div>
+    <div class="other"><input type="text" data-qtext="q2" placeholder="其他/补充说明（可选）"></div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q">
+    <div class="qt"><span class="qn">3</span>销售底价谁定？</div>
+    <div class="hint">库存的最低售价由谁控制？</div>
+    <div class="opts" data-q="q3_pricing">
+      <label class="opt"><input type="radio" name="q3" value="老板统一设底价">老板统一设底价</label>
+      <label class="opt"><input type="radio" name="q3" value="各合伙人自定(老板只设底线)">各合伙人自定（老板只设底线）</label>
+      <label class="opt"><input type="radio" name="q3" value="分级:部分老板定,部分合伙人定">分级：部分老板定、部分合伙人定</label>
+    </div>
+    <div class="other"><input type="text" data-qtext="q3" placeholder="其他/补充说明（可选）"></div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q">
+    <div class="qt"><span class="qn">4</span>货款怎么归集再分润？</div>
+    <div class="hint">客户回款是统一进公司账户，还是各合伙人各自收？</div>
+    <div class="opts" data-q="q4_cashflow">
+      <label class="opt"><input type="radio" name="q4" value="统一进公司账户再分润">统一进公司账户再分润</label>
+      <label class="opt"><input type="radio" name="q4" value="各合伙人收款后上缴">各合伙人收款后上缴</label>
+      <label class="opt"><input type="radio" name="q4" value="混合(大客户统一,散户自收)">混合（大客户统一，散户自收）</label>
+    </div>
+    <div class="other"><input type="text" data-qtext="q4" placeholder="其他/补充说明（可选）"></div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q">
+    <div class="qt"><span class="qn">5</span>加工是自己干还是外包？</div>
+    <div class="hint">影响系统要不要做排产、辅料、外包加工费管理。</div>
+    <div class="opts" data-q="q5_process">
+      <label class="opt"><input type="radio" name="q5" value="自有加工厂">自有加工厂</label>
+      <label class="opt"><input type="radio" name="q5" value="外包加工">外包加工</label>
+      <label class="opt"><input type="radio" name="q5" value="部分自有+部分外包">部分自有 + 部分外包</label>
+    </div>
+    <div class="other"><input type="text" data-qtext="q5" placeholder="其他/补充说明（可选）"></div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q">
+    <div class="qt"><span class="qn">6</span>系统部署在哪？</div>
+    <div class="hint">SaaS 在线用，还是装在自己服务器上？</div>
+    <div class="opts" data-q="q6_deploy">
+      <label class="opt"><input type="radio" name="q6" value="SaaS(在线用,省事)">SaaS（在线用，省事）</label>
+      <label class="opt"><input type="radio" name="q6" value="本地化(数据在自己服务器)">本地化（数据在自己服务器）</label>
+      <label class="opt"><input type="radio" name="q6" value="都行,听你建议">都行，听你建议</label>
+    </div>
+    <div class="other"><input type="text" data-qtext="q6" placeholder="其他/补充说明（可选）"></div>
+  </div>
+
+  <!-- 品种 + 备注 -->
+  <div class="block">
+    <label>你们主要经营哪些品种？（便于优先支持）</label>
+    <input id="species" type="text" placeholder="如：当归、黄芪、党参、三七…" maxlength="400" style="width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:8px;font-size:15px">
+  </div>
+  <div class="block">
+    <label>还有什么想说的（业务痛点、特别想要的功能）</label>
+    <textarea id="note" placeholder="随便写，越具体越好"></textarea>
+  </div>
+
+  <div class="submit">
+    <button class="btn" id="submitBtn" onclick="submitForm()">提交问卷</button>
+  </div>
+  <div id="result"></div>
+
+  <p class="foot">本草链 HerbChain · 问卷答案仅用于系统设计，不会外传。</p>
+</div>
+
+<script>
+function gather(){
+  const answers = {};
+  const qids = ["q1","q2","q3","q4","q5","q6"];
+  const labels = {
+    q1:"分润口径", q2:"客户可见性", q3:"底价定价权", q4:"货款归集", q5:"加工方式", q6:"部署方式"
+  };
+  qids.forEach(q=>{
+    const chosen = document.querySelector(`input[name="${q}"]:checked`);
+    const extra  = document.querySelector(`input[data-qtext="${q}"]`).value.trim();
+    let val = chosen ? chosen.value : "";
+    if (extra) val = val ? `${val}（补充：${extra}）` : `其他：${extra}`;
+    if (val) answers[labels[q]] = val;
+  });
+  const sp = document.getElementById("species").value.trim();
+  if (sp) answers["主要品种"] = sp;
+  return answers;
+}
+function submitForm(){
+  const answers = gather();
+  if (Object.keys(answers).length === 0){
+    show("请至少回答一两道题再提交。","err"); return;
+  }
+  const payload = {
+    name: document.getElementById("name").value.trim(),
+    role: document.getElementById("role").value.trim(),
+    answers: answers,
+    note: document.getElementById("note").value.trim()
+  };
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true; btn.textContent = "提交中…";
+  fetch("/api/answers", {method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify(payload)})
+    .then(r=>r.json())
+    .then(d=>{
+      if (d.ok){ show("✅ 已收到，谢谢你的回答！系统会按大家的意见来搭。","ok");
+                 document.querySelector(".wrap").scrollIntoView({behavior:"smooth"}); }
+      else { show("提交失败："+(d.error||"未知错误"),"err"); }
+    })
+    .catch(e=>show("网络错误，请重试："+e,"err"))
+    .finally(()=>{ btn.disabled=false; btn.textContent="提交问卷"; });
+}
+function show(msg,cls){
+  const el=document.getElementById("result");
+  el.textContent=msg; el.className=cls; el.style.display="block";
+}
+</script>
+</body>
+</html>

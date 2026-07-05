@@ -13,6 +13,9 @@ __pycache__/
 # Claude 工作目录
 .claude/
 
+# deploy.sh 生成的备份目录
+backup-*/
+
 # 日志与临时
 *.log
 .DS_Store

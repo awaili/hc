@@ -44,6 +44,13 @@
   .card .ico{font-size:30px;margin-bottom:14px}
   .card h3{font-size:19px;margin-bottom:10px}
   .card p{color:var(--muted);font-size:15px}
+  .card.featured{grid-column:1/-1;background:linear-gradient(180deg,#eef7ef,#fff);border:2px solid var(--green);display:grid;grid-template-columns:auto 1fr;gap:0 22px;align-items:center}
+  .card.featured .ico{font-size:38px;margin:0}
+  .card.featured h3{font-size:22px;margin-bottom:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .card.featured p{font-size:16px}
+  .coretag{font-size:12px;background:var(--green);color:#fff;padding:2px 10px;border-radius:999px;font-weight:700;letter-spacing:.5px}
+  .plan{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:1px 8px;border-radius:999px;font-weight:400;margin-left:6px;white-space:nowrap}
+  @media(max-width:780px){.card.featured{grid-template-columns:1fr}}
   .flow{display:flex;align-items:stretch;gap:0;margin-top:20px;flex-wrap:wrap}
   .flow .step{flex:1;min-width:140px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;text-align:center;position:relative}
   .flow .step .n{display:inline-block;width:30px;height:30px;line-height:30px;border-radius:50%;background:var(--green);color:#fff;font-size:14px;margin-bottom:10px}
@@ -139,12 +146,18 @@
   <h2 class="sec-title">核心模块</h2>
   <p class="sec-sub">为上面这些真实痛点，我们做了这 6 块</p>
   <div class="grid">
-    <div class="card"><div class="ico">🌾</div><h3>产地收购</h3><p>现场过磅、收购批次建档、种植户结算与预付，自动开具农产品收购发票。</p></div>
-    <div class="card"><div class="ico">⚙️</div><h3>生产加工</h3><p>领料加工、折干率与损耗核算、成品批次父子关系、加工费用归集进成本。</p></div>
-    <div class="card"><div class="ico">🧪</div><h3>质量与追溯</h3><p>药典项目质检、COA 报告书、批次冻结放行，全链路一键逆向追溯。</p></div>
-    <div class="card"><div class="ico">📦</div><h3>仓储库存</h3><p>批次级库存、多仓调拨、库龄 FIFO、陈货加价、扫码出入库。</p></div>
-    <div class="card"><div class="ico">🤝</div><h3>销售协作</h3><p>合伙人客户隔离、底价管控、订单库存锁定、避免撞单与串货。</p></div>
-    <div class="card"><div class="ico">💰</div><h3>财税合规与分润</h3><p>批次级带税成本与税后净利测算、收购发票与销项专票管理、三流一致校验、按净利自动分润。</p></div>
+    <div class="card featured">
+      <div class="ico">💰</div>
+      <div>
+        <h3>财税合规与分润 <span class="coretag">核心</span></h3>
+        <p>批次级带税成本与<b>真实税后净利</b>测算、农产品收购发票与销项专票管理、三流一致校验、<b>双主体税负拆分测算</b>、按净利自动分润、<b>政策申诉数据支撑</b>——访谈里被反复点名的核心痛点。</p>
+      </div>
+    </div>
+    <div class="card"><div class="ico">🌾</div><h3>产地收购</h3><p>现场过磅、收购批次建档、种植户/加工户结算与预付、自动开具收购发票——同时作为<b>税负测算的数据底座</b>。</p></div>
+    <div class="card"><div class="ico">🤝</div><h3>销售协作</h3><p>合伙人客户隔离、底价管控、订单库存锁定、避免撞单串货；<b>按客户类型分类开票</b>，双主体（一般纳税人/小规模）税负测算。</p></div>
+    <div class="card"><div class="ico">⚙️</div><h3>生产加工<span class="plan">适用自有加工</span></h3><p>领料加工、折干率与损耗核算、成品批次父子关系、加工费归集进成本。</p></div>
+    <div class="card"><div class="ico">🧪</div><h3>质量与追溯</h3><p>基础质检（含量/农残/COA、批次冻结放行）；全链路追溯<b>视货源可追溯性</b>，不硬承诺。</p></div>
+    <div class="card"><div class="ico">📦</div><h3>仓储与发货<span class="plan">规划中</span></h3><p>批次库存、多仓调拨、发货物流、运费归集。</p></div>
   </div>
 </div></section>
 

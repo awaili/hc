@@ -6,6 +6,7 @@
 <title>本草链 HerbChain · 中药材大货贸易协作系统</title>
 <meta name="description" content="本草链 HerbChain —— 产地收购、生产加工、多销售合伙人协作的中药材大货贸易一体化系统。批次追溯、分润对账、质量合规。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>🌿</text></svg>">
+<script src="chat-code.js"></script>
 <style>
   :root{
     --green:#1f6b3a; --green-deep:#0f4724; --gold:#b8893b; --ink:#1c2a22;
@@ -98,16 +99,17 @@
   <p class="lead">上游拿不到 9% 进项、销项 9% 照交、反向开票还被查——薄毛利扛不住实缴税负，接一单可能亏一单。本草链按批次算清"采购成本 + 进项缺口 + 实缴税负 = 真实税后净利"，再决定这单接不接；产加销协作、批次追溯、分润对账一并打通。</p>
   <div class="cta">
     <a class="btn primary" href="#case">看真实案例</a>
-    <a class="btn ghost" href="chat.html">说说你的痛点</a>
+    <a class="btn ghost" href="chat.html" data-chat>说说你的痛点</a>
   </div>
 </div></section>
 
 <div class="coop"><div class="wrap">
   🔥 已有 <b id="coopN">…</b> 位同行参与共建 · 首批 50 名早鸟名额剩余 <b id="coopLeft">…</b>
   <span class="bar"><i id="coopBar" style="width:0%"></i></span>
-  <a href="chat.html">我也参与 →</a>
+  <a href="chat.html" data-chat>我也参与 →</a>
 </div></div>
-<script>fetch('/api/count').then(r=>r.json()).then(d=>{const n=d.participants||0,left=Math.max(0,50-n),pct=Math.min(100,n/50*100);const e=id=>document.getElementById(id);if(e('coopN')){e('coopN').textContent=n;e('coopLeft').textContent=left;e('coopBar').style.width=pct+'%';}}).catch(()=>{});</script>
+<script>fetch('/api/count').then(r=>r.json()).then(d=>{const n=d.participants||0,left=Math.max(0,50-n),pct=Math.min(100,n/50*100);const e=id=>document.getElementById(id);if(e('coopN')){e('coopN').textContent=n;e('coopLeft').textContent=left;e('coopBar').style.width=pct+'%';}}).catch(()=>{});
+document.querySelectorAll('[data-chat]').forEach(a=>a.href='chat.html?code='+encodeURIComponent(window.CHAT_CODE||''));</script>
 
 <section id="case" class="case alt"><div class="wrap">
   <h2 class="sec-title">来自一线的真实需求</h2>
@@ -138,7 +140,7 @@
   <p class="footnote">这也是为什么本草链把<b style="color:var(--green-deep)">财税合规</b>做成贯穿全流程的强制项，而不是事后补丁。</p>
   <div class="cta2">
     <a class="btn primary" href="#modules">看看这些能力怎么落地 ↓</a>
-    <a class="btn ghost" href="chat.html" style="margin-left:10px">说说你的真实痛点</a>
+    <a class="btn ghost" href="chat.html" style="margin-left:10px" data-chat>说说你的真实痛点</a>
   </div>
 </div></section>
 

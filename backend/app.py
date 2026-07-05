@@ -36,6 +36,22 @@ MAX_TURNS  = 24          # 单会话最多用户消息条数
 LLM_TIMEOUT= 120
 LLM_MAXTOK = 4000        # 聊天:glm-5.2 先 thinking 后 text,留足防正文被截断(回复仍按提示词保持简短)
 EXTRACT_MAXTOK = 6000    # 生成需求摘要:要把整场访谈整理成结构化Markdown,给足
+MAX_NEW_PER_DAY = 10     # 单 IP 每日最多新建访谈会话数(口令公开后防刷)
+
+import time as _time
+_new_sess_log = {}       # {ip: [timestamps]} 内存计数,重启清零
+
+def _allow_new_session(ip):
+    """每 IP 每日新建会话数限制。返回 True 表示允许。"""
+    now = _time.time()
+    cutoff = now - 86400
+    arr = [t for t in _new_sess_log.get(ip, []) if t > cutoff]
+    if len(arr) >= MAX_NEW_PER_DAY:
+        _new_sess_log[ip] = arr
+        return False
+    arr.append(now)
+    _new_sess_log[ip] = arr
+    return True
 
 app = Flask(__name__)
 os.makedirs(REQ_DIR, exist_ok=True)
@@ -252,6 +268,8 @@ def chat():
     is_opener = bool(data.get("opener"))
     sess = load_session(sid) if sid else None
     if sess is None:
+        if not _allow_new_session(client_ip()):
+            return jsonify(ok=False, error="今日新建访谈数已达上限("+str(MAX_NEW_PER_DAY)+"场/IP),请明日再试或继续已有访谈"), 429
         sid = new_session_id()
         sess = {"id": sid, "token": secrets.token_urlsafe(16),
                 "name": (data.get("name") or "").strip()[:60],

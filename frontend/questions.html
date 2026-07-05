@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>本草链 HerbChain · 关键问题问卷</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>🌿</text></svg>">
+<script src="chat-code.js"></script>
 <style>
   :root{--green:#1f6b3a;--green-deep:#0f4724;--ink:#1c2a22;--bg:#f7f5ef;--line:#e4e0d4;--muted:#5d6b5d}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -54,7 +55,7 @@
 <div class="wrap">
   <p class="intro">为了把"本草链"按我们真实的业务搭好，请先回答下面这几个关键问题。<b>没有标准答案，按你实际想法选就行</b>。每题可选一个主选项，必要时在"其他/说明"里补充。大约 3 分钟。</p>
   <div style="background:#e7f4ec;border:1px solid #bfe3cf;border-radius:8px;padding:10px 12px;font-size:13.5px;color:var(--green-deep);margin:18px 0">
-    🎁 <b>3 分钟也计入共建</b>：填完即获「首批共建用户」资格（限前 50 名，享上线后专享权益）。想拿针对你生意的《财税合规诊断报告》？<a href="chat.html" style="color:var(--green-deep);border-bottom:1px dashed">去花 15 分钟聊一轮访谈 →</a>
+    🎁 <b>3 分钟也计入共建</b>：填完即获「首批共建用户」资格（限前 50 名，享上线后专享权益）。想拿针对你生意的《财税合规诊断报告》？<a href="chat.html" data-chat style="color:var(--green-deep);border-bottom:1px dashed">去花 15 分钟聊一轮访谈 →</a>
   </div>
   <div style="background:#fff7e6;border:1px solid #e8c97a;border-radius:8px;padding:10px 12px;font-size:13px;color:#7a5b12;margin:18px 0">
     ⚠️ <b>税务合规提示</b>：中药材大货是税务高风险行业。系统会把"农产品收购发票、进项抵扣、销项开票、货/钱/票三流一致防虚开"做进流程。若有特别的税务处理诉求，请在最后一栏备注里写明。
@@ -201,6 +202,7 @@ function show(msg,cls){
   const el=document.getElementById("result");
   el.textContent=msg; el.className=cls; el.style.display="block";
 }
+document.querySelectorAll('[data-chat]').forEach(a=>a.href='chat.html?code='+encodeURIComponent(window.CHAT_CODE||''));
 </script>
 </body>
 </html>

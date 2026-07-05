@@ -31,6 +31,7 @@ PROMPT_FILE= os.path.join(APP_DIR, "system_prompt.md")
 COUCH_ENV   = os.path.join(APP_DIR, "couchdb.env")
 DB_ANSWERS  = "hc_answers"
 DB_SESSIONS = "hc_sessions"
+DB_DOCS     = "hc_docs"      # 协同起草文档
 
 MAX_TURNS  = 24          # 单会话最多用户消息条数
 LLM_TIMEOUT= 120
@@ -122,7 +123,7 @@ def _init_db():
     global _db_inited
     if _db_inited or _couch()[0] is None:
         return
-    for db in (DB_ANSWERS, DB_SESSIONS):
+    for db in (DB_ANSWERS, DB_SESSIONS, DB_DOCS):
         _couch_req("PUT", "/" + db)
     _db_inited = True
 
@@ -394,6 +395,56 @@ def pub_count():
     a = cnt(DB_ANSWERS)
     s = cnt(DB_SESSIONS)
     return jsonify(ok=True, answers=a, sessions=s, participants=a + s)
+
+
+# ---------- 协同起草 ----------
+@app.get("/api/draft")
+def draft_get():
+    """读取协同文档。凭 access 口令。返回正文+rev+最后更新人。"""
+    if (request.args.get("access") or "") != access_code():
+        return jsonify(ok=False, error="访问口令错误"), 403
+    docid = (request.args.get("doc") or "default").strip()
+    if not _SID_RE.fullmatch(docid):
+        return jsonify(ok=False, error="doc id 非法"), 400
+    _init_db()
+    code, resp = _couch_req("GET", "/" + DB_DOCS + "/" + urllib.parse.quote(docid, safe=""))
+    if code == 404:
+        return jsonify(ok=True, exists=False, text="", rev="", updated="", updated_by="")
+    if code != 200:
+        return jsonify(ok=False, error="读取失败"), 500
+    return jsonify(ok=True, exists=True, text=resp.get("text", ""),
+                   rev=resp.get("_rev", ""), updated=resp.get("updated", ""),
+                   updated_by=resp.get("updated_by", ""))
+
+
+@app.post("/api/draft")
+def draft_save():
+    """保存协同文档。带 rev 做乐观锁:若服务端 rev 与客户端不一致(他人已改)返回409+最新版。"""
+    data = request.get_json(silent=True) or {}
+    if (data.get("access") or "") != access_code():
+        return jsonify(ok=False, error="访问口令错误"), 403
+    docid = (data.get("doc") or "default").strip()
+    if not _SID_RE.fullmatch(docid):
+        return jsonify(ok=False, error="doc id 非法"), 400
+    text = data.get("text") or ""
+    if len(text) > 200000:
+        return jsonify(ok=False, error="正文过长(>20万字符)"), 400
+    editor = (data.get("editor") or "").strip()[:60]
+    rev = (data.get("rev") or "").strip()
+    _init_db()
+    body = {"text": text,
+            "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "updated_by": editor}
+    if rev:
+        body["_rev"] = rev
+    code, resp = _couch_req("PUT", "/" + DB_DOCS + "/" + urllib.parse.quote(docid, safe=""), body=body)
+    if code in (200, 201):
+        return jsonify(ok=True, rev=resp.get("rev"), updated=body["updated"])
+    if code == 409:
+        c2, cur = _couch_req("GET", "/" + DB_DOCS + "/" + urllib.parse.quote(docid, safe=""))
+        return jsonify(ok=False, error="版本冲突:他人已更新,请先拉取最新版", conflict=True,
+                       text=cur.get("text", ""), rev=cur.get("_rev", "")), 409
+    return jsonify(ok=False, error="保存失败", detail=resp), 500
 
 
 @app.get("/")

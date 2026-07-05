@@ -69,6 +69,11 @@
   .painmap .pm .body b{color:var(--green-deep)}
   .case .footnote{text-align:center;color:var(--muted);margin-top:28px}
   .case .cta2{text-align:center;margin-top:18px}
+  .coop{background:var(--green-deep);color:#fff;padding:14px 0;text-align:center;font-size:14px}
+  .coop b{color:#ffd97a}
+  .coop .bar{display:inline-block;width:180px;max-width:40vw;height:8px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden;margin:0 10px;vertical-align:middle}
+  .coop .bar i{display:block;height:100%;background:#9fe3b3;transition:width .6s}
+  .coop a{color:#ffd97a;border-bottom:1px dashed rgba(255,217,122,.5)}
   @media(max-width:780px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:32px}.flow .arr{display:none}.painmap{grid-template-columns:1fr}}
 </style>
 </head>
@@ -89,6 +94,13 @@
     <a class="btn ghost" href="chat.html">说说你的痛点</a>
   </div>
 </div></section>
+
+<div class="coop"><div class="wrap">
+  🔥 已有 <b id="coopN">…</b> 位同行参与共建 · 首批 50 名早鸟名额剩余 <b id="coopLeft">…</b>
+  <span class="bar"><i id="coopBar" style="width:0%"></i></span>
+  <a href="chat.html">我也参与 →</a>
+</div></div>
+<script>fetch('/api/count').then(r=>r.json()).then(d=>{const n=d.participants||0,left=Math.max(0,50-n),pct=Math.min(100,n/50*100);const e=id=>document.getElementById(id);if(e('coopN')){e('coopN').textContent=n;e('coopLeft').textContent=left;e('coopBar').style.width=pct+'%';}}).catch(()=>{});</script>
 
 <section id="case" class="case alt"><div class="wrap">
   <h2 class="sec-title">来自一线的真实需求</h2>

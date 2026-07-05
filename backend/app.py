@@ -366,6 +366,18 @@ def session_detail(sid):
     return jsonify(ok=True, session=_strip(s))
 
 
+@app.get("/api/count")
+def pub_count():
+    """公开计数(无需令牌): 问卷数/访谈数/总参与人数。只暴露计数,不暴露内容。"""
+    _init_db()
+    def cnt(db):
+        code, resp = _couch_req("GET", "/" + db + "/_all_docs", params={"limit": "0"})
+        return resp.get("total_rows", 0) if code == 200 and isinstance(resp, dict) else 0
+    a = cnt(DB_ANSWERS)
+    s = cnt(DB_SESSIONS)
+    return jsonify(ok=True, answers=a, sessions=s, participants=a + s)
+
+
 @app.get("/")
 def root():
     return jsonify(ok=True, service="hc-survey", version="2.1-couchdb")

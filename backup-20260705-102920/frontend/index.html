@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本草链 HerbChain · 中药材大货贸易协作系统</title>
+<meta name="description" content="本草链 HerbChain —— 产地收购、生产加工、多销售合伙人协作的中药材大货贸易一体化系统。批次追溯、分润对账、质量合规。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>🌿</text></svg>">
+<style>
+  :root{
+    --green:#1f6b3a; --green-deep:#0f4724; --gold:#b8893b; --ink:#1c2a22;
+    --bg:#f7f5ef; --line:#e4e0d4; --muted:#5d6b5d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--bg);line-height:1.7}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  header.nav{position:sticky;top:0;z-index:10;background:rgba(247,245,239,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;letter-spacing:.5px}
+  .brand .logo{font-size:26px}
+  .brand small{font-size:12px;color:var(--muted);font-weight:400;letter-spacing:1px}
+  nav.links a{margin-left:26px;font-size:15px;color:var(--muted)}
+  nav.links a:hover{color:var(--green)}
+  .hero{padding:90px 0 70px;text-align:center;background:
+     radial-gradient(1200px 400px at 50% -10%,rgba(31,107,58,.10),transparent),var(--bg)}
+  .hero .tag{display:inline-block;padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--muted);margin-bottom:22px}
+  .hero h1{font-size:46px;line-height:1.2;font-weight:800;letter-spacing:1px}
+  .hero h1 span{color:var(--green)}
+  .hero p.lead{margin:22px auto 0;max-width:680px;font-size:18px;color:var(--muted)}
+  .hero .cta{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-block;padding:13px 28px;border-radius:8px;font-size:16px;font-weight:600;transition:.2s}
+  .btn.primary{background:var(--green);color:#fff}
+  .btn.primary:hover{background:var(--green-deep)}
+  .btn.ghost{border:1px solid var(--green);color:var(--green)}
+  .btn.ghost:hover{background:var(--green);color:#fff}
+  section{padding:64px 0}
+  section.alt{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .sec-title{text-align:center;margin-bottom:8px;font-size:30px;font-weight:800}
+  .sec-sub{text-align:center;color:var(--muted);margin-bottom:48px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:28px;transition:.2s}
+  .card:hover{border-color:var(--green);box-shadow:0 8px 24px rgba(31,107,58,.08);transform:translateY(-2px)}
+  .card .ico{font-size:30px;margin-bottom:14px}
+  .card h3{font-size:19px;margin-bottom:10px}
+  .card p{color:var(--muted);font-size:15px}
+  .flow{display:flex;align-items:stretch;gap:0;margin-top:20px;flex-wrap:wrap}
+  .flow .step{flex:1;min-width:140px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;text-align:center;position:relative}
+  .flow .step .n{display:inline-block;width:30px;height:30px;line-height:30px;border-radius:50%;background:var(--green);color:#fff;font-size:14px;margin-bottom:10px}
+  .flow .arr{align-self:center;color:var(--green);font-size:22px;padding:0 6px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+  .stats .num{font-size:34px;font-weight:800;color:var(--green)}
+  .stats .lbl{color:var(--muted);font-size:14px;margin-top:6px}
+  footer{background:var(--green-deep);color:#d8e6db;padding:40px 0;text-align:center;font-size:14px}
+  footer a{color:#fff;border-bottom:1px dashed rgba(255,255,255,.4)}
+  @media(max-width:780px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:32px}.flow .arr{display:none}}
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <div class="brand"><span class="logo">🌿</span> 本草链 <small>HerbChain</small></div>
+  <nav class="links">
+    <a href="#modules">功能</a><a href="#flow">链路</a><a href="#stats">价值</a><a href="#contact">联系</a>
+  </nav>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <span class="tag">中药材大货 · 产加销协作平台</span>
+  <h1>从产地到客户，<span>一批货一条链</span></h1>
+  <p class="lead">本草链 HerbChain 把产地收购、生产加工、多位销售合伙人的协作打通——库存在线、批次可追、分润自动、税务合规。让大货生意不再靠微信群和 Excel。</p>
+  <div class="cta">
+    <a class="btn primary" href="#contact">申请试用</a>
+    <a class="btn ghost" href="#modules">查看功能</a>
+  </div>
+</div></section>
+
+<section id="modules"><div class="wrap">
+  <h2 class="sec-title">核心模块</h2>
+  <p class="sec-sub">覆盖中药材大货贸易的每一个环节</p>
+  <div class="grid">
+    <div class="card"><div class="ico">🌾</div><h3>产地收购</h3><p>现场过磅、收购批次建档、种植户结算与预付，自动开具农产品收购发票。</p></div>
+    <div class="card"><div class="ico">⚙️</div><h3>生产加工</h3><p>领料加工、折干率与损耗核算、成品批次父子关系、加工费用归集进成本。</p></div>
+    <div class="card"><div class="ico">🧪</div><h3>质量与追溯</h3><p>药典项目质检、COA 报告书、批次冻结放行，全链路一键逆向追溯。</p></div>
+    <div class="card"><div class="ico">📦</div><h3>仓储库存</h3><p>批次级库存、多仓调拨、库龄 FIFO、陈货加价、扫码出入库。</p></div>
+    <div class="card"><div class="ico">🤝</div><h3>销售协作</h3><p>合伙人客户隔离、底价管控、订单库存锁定、避免撞单与串货。</p></div>
+    <div class="card"><div class="ico">💰</div><h3>分润对账</h3><p>按批次核算利润、自动分润、回款认领、月度一键出分润单。</p></div>
+  </div>
+</div></section>
+
+<section id="flow" class="alt"><div class="wrap">
+  <h2 class="sec-title">一批货的完整链路</h2>
+  <p class="sec-sub">批次号贯穿始终，随时可逆向追溯</p>
+  <div class="flow">
+    <div class="step"><span class="n">1</span><div>产地收购</div></div><div class="arr">→</div>
+    <div class="step"><span class="n">2</span><div>生产加工</div></div><div class="arr">→</div>
+    <div class="step"><span class="n">3</span><div>质检入库</div></div><div class="arr">→</div>
+    <div class="step"><span class="n">4</span><div>销售接单</div></div><div class="arr">→</div>
+    <div class="step"><span class="n">5</span><div>发货开票</div></div><div class="arr">→</div>
+    <div class="step"><span class="n">6</span><div>收款分润</div></div>
+  </div>
+</div></section>
+
+<section id="stats"><div class="wrap">
+  <h2 class="sec-title">为什么用本草链</h2>
+  <p class="sec-sub">为中药材大货贸易的真实业务而设计</p>
+  <div class="stats">
+    <div><div class="num">1条链</div><div class="lbl">产加销全链路打通</div></div>
+    <div><div class="num">0盲区</div><div class="lbl">库存批次实时可见</div></div>
+    <div><div class="num">100%</div><div class="lbl">批次质量可追溯</div></div>
+    <div><div class="num">1键</div><div class="lbl">月度分润自动出</div></div>
+  </div>
+</div></section>
+
+<footer id="contact"><div class="wrap">
+  <div>🌿 本草链 HerbChain · 中药材大货贸易协作系统</div>
+  <div style="margin-top:10px;color:#9fc0a3">产地收购 · 生产加工 · 多人销售 · 批次追溯 · 分润对账 · 税务合规</div>
+  <div style="margin-top:14px">联系： <a href="mailto:hello@quickpapa.com">hello@quickpapa.com</a></div>
+  <div style="margin-top:14px;color:#9fc0a3">© 2026 HerbChain · hc.quickpapa.com</div>
+</div></footer>
+</body>
+</html>

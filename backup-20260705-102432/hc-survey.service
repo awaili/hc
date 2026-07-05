@@ -1,0 +1,18 @@
+[Unit]
+Description=HerbChain survey answer-collection backend
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/hc-survey/app.py
+Restart=on-failure
+RestartSec=3
+# 安全收敛
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/data/hc-survey /opt/hc-survey
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target

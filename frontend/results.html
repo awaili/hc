@@ -53,7 +53,17 @@
   /* 对话气泡 */
   .dlg .m{max-width:88%;margin:8px 0}
   .dlg .m.u{margin-left:auto;text-align:right}
-  .dlg .m .b{display:inline-block;padding:10px 14px;border-radius:12px;font-size:14px;white-space:pre-wrap;word-break:break-word;text-align:left}
+  .dlg .m .b{display:inline-block;padding:10px 14px;border-radius:12px;font-size:14px;white-space:normal;word-break:break-word;text-align:left}
+  .dlg .m .b p{margin:4px 0}
+  .dlg .m .b ul,.dlg .m .b ol{margin:4px 0;padding-left:22px}
+  .dlg .m .b li{margin:2px 0}
+  .dlg .m .b b,.dlg .m .b strong{color:var(--green-deep)}
+  .dlg .m .b code{background:#f1efe6;padding:1px 5px;border-radius:4px;font-size:13px}
+  .dlg .m .b pre{background:#f1efe6;padding:10px;border-radius:8px;overflow-x:auto}
+  .dlg .m .b table{border-collapse:collapse;margin:6px 0;font-size:13px}
+  .dlg .m .b th,.dlg .m .b td{border:1px solid var(--line);padding:5px 8px}
+  .dlg .m .b th{background:#f1efe6}
+  .dlg .m .b blockquote{border-left:3px solid var(--green);padding-left:10px;color:var(--muted);margin:5px 0}
   .dlg .m.u .b{background:var(--green);color:#fff;border-bottom-right-radius:3px}
   .dlg .m.a .b{background:#fff;border:1px solid var(--line);border-bottom-left-radius:3px}
   .back{margin-bottom:12px}
@@ -138,6 +148,7 @@
       <button class="btn" onclick="mdView2('src')">源码</button>
       <button class="btn" onclick="copyMdModal()">复制</button>
       <button class="btn" onclick="dlMdModal()">下载 .md</button>
+      <button class="btn" onclick="printMd($('#mdModalRendered').innerHTML,'本草链访谈记录')">打印</button>
       <button class="btn" onclick="closeMdModal()">关闭</button>
     </div>
     <div style="padding:22px;overflow-y:auto">
@@ -150,6 +161,12 @@
 
 <script>
 let TOKEN="", CHAT=[];
+function renderMd(t){try{return sanitizeMd(marked.parse(t,{breaks:true}));}catch(e){return esc(t).replace(/\n/g,"<br>");}}
+function printMd(html,title){
+  const w=window.open("","_blank");if(!w){alert("请允许弹窗以打印");return;}
+  w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+esc(title)+'</title><style>body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:820px;margin:auto;padding:28px;color:#1c2a22;line-height:1.75}h1{font-size:22px;border-bottom:1px solid #ccc;padding-bottom:6px}h2{font-size:17px;color:#0f4724}h3{font-size:15px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid #ccc;padding:6px 9px;text-align:left;vertical-align:top}th{background:#f1efe6}pre{background:#f1efe6;padding:12px;border-radius:8px;overflow-x:auto}code{background:#f1efe6;padding:1px 5px;border-radius:4px}blockquote{border-left:3px solid #1f6b3a;padding-left:12px;color:#555;margin:8px 0}.msg{margin:12px 0}.u{text-align:right}.u .b{display:inline-block;background:#eef5ef;padding:8px 12px;border-radius:10px;max-width:80%}.a .b{display:inline-block;background:#fff;border:1px solid #ddd;padding:8px 12px;border-radius:10px;max-width:80%}.b p{margin:4px 0}.b ul,.b ol{margin:4px 0;padding-left:22px}.b b{color:#0f4724}</style></head><body>'+html+'</body></html>');
+  w.document.close();w.focus();w.print();
+}
 const $=s=>document.querySelector(s);
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function el(html){const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstElementChild;}
@@ -258,17 +275,19 @@ function openSession(id){
     const t=el('<h2></h2>'); t.textContent=(s.name||"匿名")+" · "+(s.role||""); head.appendChild(t);
     const ex=el('<button class="btn" onclick="exportTranscript(\''+id+'\')">⤵ 导出本场访谈(MD)</button>');
     head.appendChild(ex);
+    const pr=el('<button class="btn" onclick="printTranscript(\''+id+'\')">🖨 打印本场</button>');
+    head.appendChild(pr);
     box.appendChild(head);
     const dlg=el('<div class="dlg"></div>');
     (s.msgs||[]).forEach(m=>{
       const isU=m.role==="user";
       const row=el('<div class="m '+(isU?"u":"a")+'"><div class="b"></div></div>');
-      row.querySelector(".b").textContent=m.content;
+      row.querySelector(".b").innerHTML=renderMd(m.content);
       dlg.appendChild(row);
     });
     box.appendChild(dlg);
     if(s.requirements_md){
-      const rb=el('<div class="reqbox"><h3>📋 已生成的需求摘要</h3><div class="seg"><button class="btn" id="viewRendered" onclick="mdView(\'rendered\')">排版视图</button><button class="btn" id="viewSrc" onclick="mdView(\'src\')">源码</button></div><div class="mdbody" id="mdRendered"></div><pre class="mdsrc" id="mdSrc"></pre><div style="margin-top:10px"><button class="btn" onclick="copyReq()">复制 Markdown</button> <button class="btn" onclick="dlReq()">下载 .md</button></div></div>');
+      const rb=el('<div class="reqbox"><h3>📋 已生成的需求摘要</h3><div class="seg"><button class="btn" id="viewRendered" onclick="mdView(\'rendered\')">排版视图</button><button class="btn" id="viewSrc" onclick="mdView(\'src\')">源码</button></div><div class="mdbody" id="mdRendered"></div><pre class="mdsrc" id="mdSrc"></pre><div style="margin-top:10px"><button class="btn" onclick="copyReq()">复制 Markdown</button> <button class="btn" onclick="dlReq()">下载 .md</button> <button class="btn" onclick="printReqBox()">🖨 打印</button></div></div>');
       const md=s.requirements_md;
       rb.querySelector("#mdSrc").textContent=md;
       rb.querySelector("#mdRendered").innerHTML=sanitizeMd(marked.parse(md));
@@ -281,6 +300,7 @@ function openSession(id){
   }).catch(()=>{});
 }
 function backToList(){ $("#chatDetail").style.display="none"; $("#chatList").style.display="block"; }
+function printReqBox(){const r=$("#mdRendered");printMd(r?r.innerHTML:"","本草链需求摘要");}
 function copyReq(){const t=$("#mdSrc").textContent;navigator.clipboard.writeText(t).then(()=>alert("已复制 Markdown"));}
 function dlReq(){const b=new Blob([$("#mdSrc").textContent],{type:"text/markdown"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="herbchain-需求.md";a.click();}
 function sanitizeMd(html){
@@ -325,6 +345,17 @@ function mdView2(mode){
 function closeMdModal(){$("#mdModal").classList.remove("on");}
 function copyMdModal(){navigator.clipboard.writeText($("#mdModal").dataset.md).then(()=>alert("已复制 Markdown"));}
 function dlMdModal(){const b=new Blob([$("#mdModal").dataset.md],{type:"text/markdown"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="herbchain-访谈记录.md";a.click();}
+function printTranscript(id){
+  const s=_sessCache[id];if(!s){alert("会话数据未加载");return;}
+  let html="<h1>本草链需求访谈记录</h1>";
+  html+="<p><b>访谈对象：</b>"+esc(s.name||"匿名")+"　<b>角色：</b>"+esc(s.role||"-")+"<br><b>时间：</b>"+esc((s.updated||s.created||"").replace("T"," "))+"　<b>来源IP：</b>"+esc(s.ip||"-")+"</p><hr>";
+  (s.msgs||[]).forEach((m,i)=>{
+    const who=m.role==="user"?"💬 用户":"🧑‍💼 分析师";
+    html+="<div class='msg "+(m.role==="user"?"u":"a")+"'><div class='b'>"+renderMd(m.content)+"</div></div>";
+  });
+  if(s.requirements_md){html+="<hr><h2>附：需求摘要</h2>"+renderMd(s.requirements_md);}
+  printMd(html,"本草链访谈记录 · "+(s.name||"匿名"));
+}
 </script>
 </body>
 </html>

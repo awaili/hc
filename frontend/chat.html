@@ -59,6 +59,18 @@
   .modal-card .ft{padding:12px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end}
   #err{color:#a33;font-size:13px;margin-top:10px;min-height:18px}
   .retry{color:var(--green);text-decoration:underline;cursor:pointer;margin-left:6px}
+  /* 对话气泡内的 markdown 渲染 */
+  .b{white-space:normal !important}
+  .b p{margin:5px 0}
+  .b ul,.b ol{margin:5px 0;padding-left:22px}
+  .b li{margin:2px 0}
+  .b b,.b strong{color:var(--green-deep)}
+  .b code{background:#f1efe6;padding:1px 5px;border-radius:4px;font-size:13px}
+  .b pre{background:#f1efe6;padding:10px;border-radius:8px;overflow-x:auto}
+  .b table{border-collapse:collapse;margin:6px 0;font-size:14px}
+  .b th,.b td{border:1px solid var(--line);padding:5px 8px}
+  .b th{background:#f1efe6}
+  .b blockquote{border-left:3px solid var(--green);padding-left:10px;color:var(--muted);margin:5px 0}
   .mdbody{font-size:14px;line-height:1.75;color:var(--ink);text-align:left}
   .mdbody h1{font-size:20px;margin:16px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
   .mdbody h2{font-size:17px;margin:14px 0 6px;color:var(--green-deep)}
@@ -132,6 +144,7 @@
     </div>
     <button class="btn ghost" onclick="copyMd()">复制</button>
     <button class="btn ghost" onclick="dlMd()">下载 .md</button>
+    <button class="btn ghost" onclick="printMd($('#mdRendered').innerHTML,'本草链需求摘要')">打印</button>
     <button class="btn ghost" onclick="closeModal()">关闭</button>
   </div>
   <div class="bd">
@@ -142,6 +155,12 @@
 
 <script>
 let ACCESS="", SID="", STOKEN="", busy=false, timer=null, secs=0;
+function renderMd(t){try{return sanitizeMd(marked.parse(t,{breaks:true}));}catch(e){return esc(t).replace(/\n/g,"<br>");}}
+function printMd(html,title){
+  const w=window.open("","_blank");if(!w){alert("请允许弹窗以打印");return;}
+  w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+esc(title)+'</title><style>body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;max-width:820px;margin:auto;padding:28px;color:#1c2a22;line-height:1.75}h1{font-size:22px;border-bottom:1px solid #ccc;padding-bottom:6px}h2{font-size:17px;color:#0f4724}h3{font-size:15px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid #ccc;padding:6px 9px;text-align:left;vertical-align:top}th{background:#f1efe6}pre{background:#f1efe6;padding:12px;border-radius:8px;overflow-x:auto}code{background:#f1efe6;padding:1px 5px;border-radius:4px}blockquote{border-left:3px solid #1f6b3a;padding-left:12px;color:#555;margin:8px 0}.msg{margin:10px 0}.u{text-align:right}.u .b{display:inline-block;background:#eef5ef;padding:8px 12px;border-radius:10px;max-width:80%}.a .b{display:inline-block;background:#fff;border:1px solid #ddd;padding:8px 12px;border-radius:10px;max-width:80%}.b p{margin:4px 0}.b ul,.b ol{margin:4px 0;padding-left:22px}</style></head><body>'+html+'</body></html>');
+  w.document.close();w.focus();w.print();
+}
 const $=s=>document.querySelector(s);
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 // 从 HTML 字符串创建一个 DOM 元素(修复版:不再用 querySelector 误传 HTML)
@@ -168,8 +187,9 @@ function start(){
 function push(role,text){
   const d=el('<div class="m"></div>');
   d.className="m "+(role==="user"?"user":"bot");
-  d.appendChild(el('<div class="b"></div>'));
-  d.querySelector('.b').textContent=text;
+  const b=el('<div class="b"></div>');
+  b.innerHTML=renderMd(text);
+  d.appendChild(b);
   $("#log").appendChild(d);
   $("#log").scrollTop=$("#log").scrollHeight;
 }

@@ -6,7 +6,8 @@
 <title>本草链 · 协同起草 · 靖州茯苓进项税抵扣报告</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>📝</text></svg>">
 <script src="chat-code.js"></script>
-<script src="marked.min.js"></script>
+<link rel="stylesheet" href="toastui-editor.min.css">
+<script src="toastui-editor.min.js"></script>
 <style>
   :root{--green:#1f6b3a;--green-deep:#0f4724;--ink:#1c2a22;--bg:#f7f5ef;--line:#e4e0d4;--muted:#5d6b5d}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -17,7 +18,7 @@
   header.top small{font-size:12px;color:#9fc0a3}
   header.top .spacer{flex:1}
   header.top a{color:#cfe6d3;font-size:13px;border:1px solid #2c5a3e;padding:5px 12px;border-radius:6px}
-  .wrap{max-width:980px;margin:0 auto;padding:20px 24px 80px}
+  .wrap{max-width:1000px;margin:0 auto;padding:20px 24px 80px}
   .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
   .bar .title{font-size:18px;font-weight:700;flex:1;min-width:200px}
   .bar input{padding:8px 11px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:#fff}
@@ -33,16 +34,10 @@
   .banner{display:none;background:#fff7e6;border:1px solid #e8c97a;border-radius:8px;padding:10px 12px;font-size:14px;color:#7a5b12;margin-bottom:12px}
   .banner.on{display:block}
   .banner button{margin-left:10px}
-  #editor{width:100%;min-height:62vh;border:1px solid var(--line);border-radius:10px;padding:16px;font-size:15px;font-family:inherit;line-height:1.75;resize:vertical;background:#fff}
-  #editor:focus{outline:none;border-color:var(--green)}
-  #preview{display:none;min-height:62vh;background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px;overflow:auto}
-  .mdbody h1{font-size:22px;margin:16px 0 8px;border-bottom:1px solid var(--line);padding-bottom:5px}
-  .mdbody h2{font-size:18px;margin:14px 0 6px;color:var(--green-deep)}
-  .mdbody h3{font-size:15px;margin:12px 0 5px}
-  .mdbody p{margin:8px 0}.mdbody ul,.mdbody ol{margin:8px 0;padding-left:22px}.mdbody li{margin:3px 0}
-  .mdbody b{color:var(--green-deep)}.mdbody code{background:#f1efe6;padding:1px 5px;border-radius:4px}
-  .mdbody table{border-collapse:collapse;width:100%;margin:10px 0}.mdbody th,.mdbody td{border:1px solid var(--line);padding:6px 9px}
-  .mdbody th{background:#f1efe6}
+  #editor{min-height:62vh}
+  /* Toast UI 主题微调 */
+  .toastui-editor-defaultUI{border-radius:10px;border:1px solid var(--line)}
+  .toastui-editor-defaultUI-toolbar{background:#fafaf6}
   #gate{max-width:440px;margin:60px auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:30px;text-align:center}
   #gate input{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;font-size:15px;margin:8px 0}
   #gate .err{color:#a33;font-size:13px;min-height:18px}
@@ -58,7 +53,7 @@
 
 <div id="gate">
   <h2 style="margin-bottom:6px">协同起草：访问</h2>
-  <p style="color:var(--muted);font-size:14px;margin-bottom:12px">多人共编这份报告，自动保存、自动拉取他人更新。</p>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:12px">多人共编这份报告，富文本所见即所得，自动保存、自动拉取他人更新。</p>
   <input id="g_access" type="password" placeholder="访问口令">
   <input id="g_editor" type="text" placeholder="你的称呼（用于显示编辑者）">
   <button class="btn green" style="width:100%;margin-top:8px" onclick="enter()">进入起草</button>
@@ -69,8 +64,6 @@
   <div class="wrap">
     <div class="bar">
       <div class="title" id="docTitle">关于解决靖州茯苓（中药材）产业进项税抵扣困难的报告</div>
-      <button class="btn" id="viewEdit" onclick="setView('edit')">编辑</button>
-      <button class="btn" id="viewPrev" onclick="setView('preview')">预览</button>
       <button class="btn" onclick="copyMd()">复制</button>
       <button class="btn" onclick="dlMd()">下载 .md</button>
       <button class="btn green" id="saveBtn" onclick="save(true)">保存</button>
@@ -82,20 +75,17 @@
       <span style="color:var(--muted)">编辑者: <input id="editorName" style="padding:4px 8px;font-size:13px;width:120px;border:1px solid var(--line);border-radius:6px"></span>
     </div>
     <div class="note">
-      🤝 <b>协同规则</b>：边写边自动保存；每 4 秒拉取一次他人更新——若有新版本且你本地没改动，自动同步；若你也有改动，会提示"拉取最新"避免覆盖。两人同时各改一段可能冲突，建议分段分工。
+      🤝 <b>协同规则</b>：富文本所见即所得编辑（可切 Markdown 源码模式）；边写边自动保存；每 4 秒拉取他人更新——本地无改动自动同步，有改动则提示拉取避免覆盖。两人同时各改一段可能冲突，建议分段分工。
     </div>
     <div class="banner" id="banner"></div>
-    <textarea id="editor" placeholder="在这里起草报告…"></textarea>
-    <div id="preview" class="mdbody"></div>
+    <div id="editor"></div>
   </div>
 </div>
 
 <script>
-let ACCESS="", DOC="", REV="", dirty=false, pollTimer=null, saveTimer=null, lastSavedText="";
+let ACCESS="", DOC="", REV="", dirty=false, loading=false, pollTimer=null, saveTimer=null, lastSavedText="", editor=null;
 const $=s=>document.querySelector(s);
-function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 
-// 口令:优先 chat-code.js 的 window.CHAT_CODE,其次 URL ?code=
 (function(){
   const p=new URLSearchParams(location.search);
   if(p.get("code")) window.CHAT_CODE=p.get("code");
@@ -106,33 +96,22 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","
 const SEED=`**关于解决靖州茯苓（中药材）产业进项税抵扣困难的报告**
 
 **一、产业现状**
-靖州作为全国茯苓集散地，年交易量XX吨，产值XX亿元，带动上游加工户XX户、就业XX人，辐射全国XX个产区县的种植农户。本地企业XX家从事茯苓收购加工销售，年销售额合计XX亿元。
+靖州是"中国茯苓之乡"，全国茯苓最大集散地，年交易量约8万吨，约占全国总量的70%，出口量占全国的2/3。本地企业XX家，年销售额合计XX亿元。
 
 **二、当前面临的税负困局**
-1. 上游货源经多层转手集中于交易区，源头农户分散在全国成千上万户，无法取得自产农产品收购发票（9%抵扣）；
-2. 中间加工户为自然人身份，法律上属经营户而非自产农户，企业无法自开收购发票抵扣；加工户代开仅能提供1%普票，无法抵扣进项；
-3. 下游药企、饮片厂90%以上要求开具9%增值税专用发票；
-4. 进项断链导致企业实缴税负达XX%（附测算表），远超行业平均毛利XX%，企业普遍亏损，已无法正常经营；
-5. 此前部分企业采取反向收购方式，已被税务稽查认定不合规并追缴税款，进一步加重企业负担。
+1. 上游货源经多层转手，无法取得自产农产品收购发票（9%抵扣）；
+2. 中间加工户为自然人，代开仅1%普票，无法抵扣进项；
+3. 下游药企90%以上要求开具9%增值税专用发票；
+4. 进项断链导致实缴税负远超毛利，企业普遍亏损。
 
-**三、问题性质**
-此非个别企业行为，而是中药材大货贸易行业的共性结构性问题，根源在于现行农产品收购发票政策与中药材多环节流通的实际产业链条不匹配。
+**三、政策依据与先例**
+（详见首页"政策依据"栏目：增值税法、财税2012 38号/2013 57号、公告2026 10号；陕黔桂皖宁湘6省先例。）
 
 **四、政策诉求**
-1. 申请将靖州茯苓产业纳入农产品增值税进项税额核定扣除试点；
-2. 或明确中药材初加工户（自然人）销售初加工农产品可比照自产农产品适用收购发票政策；
-3. 或出台针对中药材集散地产业的进项抵扣专项解决办法。
+1. 比照安徽"中药材商品交易中心"模式，将靖州茯苓集散地收购贸易纳入核定扣除试点；
+2. 或明确初加工户比照自产农产品适用收购发票政策。
 
-**五、不解决的影响**
-企业将被迫外迁或停业，地方税源流失、就业受损、产业萎缩，影响全国茯苓供应链稳定。
-
-**六、附件**
-- 参与企业联名签章
-- 行业协会盖章
-- 税负测算明细表
-- 产业链结构说明图
-
-（带 XX 处请填实际数据；建议附一张按批次测算的税负明细表，本草链系统可自动生成。）
+（带 XX 处请填实际数据。）
 `;
 
 function enter(){
@@ -144,28 +123,41 @@ function enter(){
   $("#app").style.display="block";
   $("#m_doc").textContent=DOC;
   $("#editorName").value=ed;
-  $("#viewEdit").classList.add("green");
+  // 初始化富文本编辑器
+  editor=new toastui.Editor({
+    el:$("#editor"),
+    height:"70vh",
+    initialEditType:"wysiwyg",
+    previewStyle:"tab",
+    usageStatistics:false,
+    events:{ change: onEditorChange }
+  });
   load(true);
-  $("#editor").addEventListener("input",onInput);
-  $("#editor").addEventListener("blur",()=>save(false));
   pollTimer=setInterval(poll,4000);
+}
+
+function onEditorChange(){
+  if(loading)return;
+  dirty=true; $("#m_dirty").style.display="inline";
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>save(false),2000);
 }
 
 function load(initial){
   fetch("/api/draft?doc="+encodeURIComponent(DOC)+"&access="+encodeURIComponent(ACCESS))
    .then(r=>r.json()).then(d=>{
      if(!d.ok){$("#m_saved").textContent="读取失败: "+(d.error||"");return;}
-     if(d.exists){
-       $("#editor").value=d.text; REV=d.rev; lastSavedText=d.text;
+     loading=true;
+     let txt="";
+     if(d.exists){ txt=d.text; REV=d.rev; lastSavedText=d.text;
        $("#m_saved").textContent="上次保存: "+(d.updated||"").replace("T"," ")+(d.updated_by?(" · "+d.updated_by):"");
-     } else if(initial){
-       $("#editor").value=SEED; REV=""; lastSavedText=SEED;
+     } else if(initial){ txt=SEED; REV=""; lastSavedText=SEED;
        $("#m_saved").textContent="新文档,未保存(点保存即创建)";
-     } else {
-       $("#editor").value=""; REV=""; lastSavedText="";
-     }
+     } else { txt=""; REV=""; lastSavedText=""; }
+     editor.setMarkdown(txt);
+     loading=false;
      dirty=false; $("#m_dirty").style.display="none";
-   }).catch(e=>$("#m_saved").textContent="网络错误");
+   }).catch(e=>{loading=false;$("#m_saved").textContent="网络错误";});
 }
 
 function poll(){
@@ -173,44 +165,40 @@ function poll(){
    .then(r=>r.json()).then(d=>{
      if(!d.ok||!d.exists)return;
      if(d.rev && d.rev!==REV){
-       // 他人有更新
        if(!dirty){
-         // 本地无改动,直接同步
-         $("#editor").value=d.text; REV=d.rev; lastSavedText=d.text;
+         loading=true;
+         editor.setMarkdown(d.text); loading=false;
+         REV=d.rev; lastSavedText=d.text;
          $("#m_saved").textContent="已同步最新: "+(d.updated||"").replace("T"," ")+(d.updated_by?(" · "+d.updated_by):"");
-         if(currentView()=='preview') renderPreview();
        } else {
-         showBanner("⚠️ 他人刚更新了文档，你本地也有未保存改动。建议先复制保存你的内容，再点"+'"拉取最新"'+"（会覆盖你当前未保存的改动）。 <button class='btn' onclick='pullLatest()'>拉取最新</button>");
+         showBanner("⚠️ 他人刚更新了文档，你本地也有未保存改动。建议先复制留存你的内容，再点"+'"拉取最新"'+"。 <button class='btn' onclick='pullLatest()'>拉取最新</button>");
        }
      }
    }).catch(()=>{});
 }
 
-function onInput(){
-  dirty=true; $("#m_dirty").style.display="inline";
-  clearTimeout(saveTimer);
-  saveTimer=setTimeout(()=>save(false),2000); // 停打字2秒自动保存
-}
+function onInput(){ /* 兼容旧调用,无操作 */ }
+
 function showBanner(html){const b=$("#banner");b.innerHTML=html;b.classList.add("on");}
 function hideBanner(){$("#banner").classList.remove("on");}
 
 function save(manual){
+  if(!editor)return;
+  const text=editor.getMarkdown();
   if(!dirty && !manual)return;
-  const text=$("#editor").value;
   if(text===lastSavedText && !manual){dirty=false;$("#m_dirty").style.display="none";return;}
-  const editor=($("#editorName").value||$("#g_editor").value||"").trim()||"匿名";
+  const who=($("#editorName").value||$("#g_editor").value||"").trim()||"匿名";
   $("#saveBtn").disabled=true;
   fetch("/api/draft",{method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({doc:DOC,access:ACCESS,text:text,editor:editor,rev:REV})})
+        body:JSON.stringify({doc:DOC,access:ACCESS,text:text,editor:who,rev:REV})})
    .then(r=>r.json()).then(d=>{
      $("#saveBtn").disabled=false;
      if(d.ok){
        REV=d.rev; lastSavedText=text; dirty=false; $("#m_dirty").style.display="none";
-       $("#m_saved").textContent="已保存: "+(d.updated||"").replace("T"," ")+" · "+editor;
+       $("#m_saved").textContent="已保存: "+(d.updated||"").replace("T"," ")+" · "+who;
        hideBanner();
-       if(currentView()=='preview') renderPreview();
      } else if(d.conflict){
-       showBanner("⚠️ "+d.error+" <button class='btn' onclick='pullLatest()'>拉取最新</button>（你当前未保存的内容仍在文本框,可先复制留存）");
+       showBanner("⚠️ "+d.error+" <button class='btn' onclick='pullLatest()'>拉取最新</button>（你当前未保存的内容仍在编辑器中,可先复制留存）");
      } else {
        $("#m_saved").textContent="保存失败: "+(d.error||"");
      }
@@ -223,22 +211,8 @@ function pullLatest(){
   hideBanner();
 }
 
-let view="edit";
-function currentView(){return view;}
-function setView(v){
-  view=v;
-  if(v==='preview'){renderPreview();$("#editor").style.display="none";$("#preview").style.display="block";$("#viewPrev").classList.add("green");$("#viewEdit").classList.remove("green");}
-  else{$("#editor").style.display="block";$("#preview").style.display="none";$("#viewEdit").classList.add("green");$("#viewPrev").classList.remove("green");}
-}
-function renderPreview(){
-  let md=$("#editor").value;
-  // 安全:marked默认不转义内联HTML,这里内容是协作方输入,strip script
-  const tmp=document.createElement('div'); tmp.innerHTML=marked.parse(md,{breaks:true});
-  tmp.querySelectorAll('script,iframe,object,embed').forEach(n=>n.remove());
-  $("#preview").innerHTML=tmp.innerHTML;
-}
-function copyMd(){navigator.clipboard.writeText($("#editor").value).then(()=>alert("已复制全文"));}
-function dlMd(){const b=new Blob([$("#editor").value],{type:"text/markdown"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="靖州茯苓进项税抵扣报告.md";a.click();}
+function copyMd(){if(editor)navigator.clipboard.writeText(editor.getMarkdown()).then(()=>alert("已复制全文"));}
+function dlMd(){if(editor){const b=new Blob([editor.getMarkdown()],{type:"text/markdown"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="靖州茯苓进项税抵扣报告.md";a.click();}}
 </script>
 </body>
 </html>

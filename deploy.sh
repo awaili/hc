@@ -75,6 +75,7 @@ log "部署 frontend -> $FRONTEND_DST"
 mkdir -p "$FRONTEND_DST"
 install -m 644 "$FRONTEND_SRC"/*.html "$FRONTEND_DST/"
 install -m 644 "$FRONTEND_SRC"/*.js "$FRONTEND_DST/" 2>/dev/null || true
+install -m 644 "$FRONTEND_SRC"/*.css "$FRONTEND_DST/" 2>/dev/null || true
 
 # --- 部署 nginx(先 -t,失败回滚) ---
 log "部署 nginx 配置(先校验)"

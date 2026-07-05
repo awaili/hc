@@ -53,14 +53,30 @@
   .stats .lbl{color:var(--muted);font-size:14px;margin-top:6px}
   footer{background:var(--green-deep);color:#d8e6db;padding:40px 0;text-align:center;font-size:14px}
   footer a{color:#fff;border-bottom:1px dashed rgba(255,255,255,.4)}
-  @media(max-width:780px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:32px}.flow .arr{display:none}}
+  /* 真实案例板块 */
+  .case .scene{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:24px;margin:20px 0}
+  .case .scene h3{font-size:18px;margin-bottom:8px}
+  .case .scene p{color:var(--muted);font-size:15px}
+  .case .quote{font-size:21px;line-height:1.6;color:var(--ink);border-left:4px solid var(--green);padding:6px 0 6px 22px;margin:26px 0 12px;font-weight:500}
+  .case .who{color:var(--muted);font-size:14px;padding-left:26px}
+  .painmap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+  .painmap .pm{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:18px}
+  .painmap .pm.h{grid-column:1} .painmap .pm.f{grid-column:2}
+  .painmap .pm .tag{font-size:13px;font-weight:700;margin-bottom:6px;display:block}
+  .painmap .pm .tag.p{color:#a33}
+  .painmap .pm .tag.s{color:var(--green-deep)}
+  .painmap .pm .body{font-size:15px;color:var(--ink)}
+  .painmap .pm .body b{color:var(--green-deep)}
+  .case .footnote{text-align:center;color:var(--muted);margin-top:28px}
+  .case .cta2{text-align:center;margin-top:18px}
+  @media(max-width:780px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:32px}.flow .arr{display:none}.painmap{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header class="nav"><div class="wrap">
   <div class="brand"><span class="logo">🌿</span> 本草链 <small>HerbChain</small></div>
   <nav class="links">
-    <a href="#modules">功能</a><a href="#flow">链路</a><a href="#stats">价值</a><a href="#contact">联系</a>
+    <a href="#case">真实案例</a><a href="#modules">功能</a><a href="#flow">链路</a><a href="#stats">价值</a><a href="#contact">联系</a>
   </nav>
 </div></header>
 
@@ -71,6 +87,39 @@
   <div class="cta">
     <a class="btn primary" href="#contact">申请试用</a>
     <a class="btn ghost" href="#modules">查看功能</a>
+  </div>
+</div></section>
+
+<section id="case" class="case alt"><div class="wrap">
+  <h2 class="sec-title">来自一线的真实需求</h2>
+  <p class="sec-sub">不是凭空设想的功能，是跟真实经营者聊出来的</p>
+
+  <div class="scene">
+    <h3>🍄 湖南靖州 · 一位茯苓大货老板的困局</h3>
+    <p>在靖州茯苓交易区，向几百上千家自然人加工户收购茯苓干货，再卖给下游药企。毛利极薄，税负却吃光了利润——这几乎是中药材大货贸易的共性痛点。</p>
+  </div>
+
+  <div class="quote">"上游进项票断链，90% 下游要 9% 专票，毛利薄扛不住税负——之前反向开收购发票还被税务稽查定性违规、进项转出补税，现在到了无法生存的死局。"</div>
+  <div class="who">—— 一位茯苓大货经营者（访谈原文，已脱敏）</div>
+
+  <div class="painmap">
+    <div class="pm"><span class="tag p">痛点 · 上游进项断链</span><div class="body">加工户是自然人，只能代开 1% 普票且转嫁税费，拿不到 9% 进项；鲜茯苓经多层二道贩子转手，源头自产证明断裂，9% 收购发票走不通。</div></div>
+    <div class="pm"><span class="tag s">→ 系统怎么帮</span><div class="body"><b>批次级带税成本测算</b>：按批次算"采购成本 + 进项缺口 + 实缴增值税及附加"，得出<b>真实税后净利</b>，接单前一目了然，不再接一单亏一单。</div></div>
+
+    <div class="pm"><span class="tag p">痛点 · 反向开票被查</span><div class="body">把加工户当自产农户反向开收购发票，被税务稽查认定不符合自产条件，进项转出补税，利润全打穿。</div></div>
+    <div class="pm"><span class="tag s">→ 系统怎么帮</span><div class="body"><b>三流一致校验</b>：采购与开票环节强制货/钱/票匹配，业务实质与发票流一致，从源头防违规。</div></div>
+
+    <div class="pm"><span class="tag p">痛点 · 90% 要专票 vs 10% 散户</span><div class="body">药企要 9% 专票、毛利扛不住；散户不要专票却又不能丢，主体怎么拆？</div></div>
+    <div class="pm"><span class="tag s">→ 系统怎么帮</span><div class="body"><b>双主体拆分测算</b>：按客户类型分别测一般纳税人与小规模身份下的实缴税负，系统告诉你哪种走法更划算。</div></div>
+
+    <div class="pm"><span class="tag p">痛点 · 政策申诉缺数据</span><div class="body">想联名向政府/税务局申请核定扣除试点，却拿不出量化材料。</div></div>
+    <div class="pm"><span class="tag s">→ 系统怎么帮</span><div class="body"><b>税负测算明细表</b>自动生成，作为向税务局、农业局递交政策诉求的合规数据依据。</div></div>
+  </div>
+
+  <p class="footnote">这也是为什么本草链把<b style="color:var(--green-deep)">财税合规</b>做成贯穿全流程的强制项，而不是事后补丁。</p>
+  <div class="cta2">
+    <a class="btn primary" href="chat.html">说说你的真实痛点</a>
+    <a class="btn ghost" href="questions.html" style="margin-left:10px">快速 6 题问卷</a>
   </div>
 </div></section>
 
